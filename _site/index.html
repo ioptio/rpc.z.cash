@@ -1,1 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>rpc.z.cash | A complete reference to the Zcash RPC.</title>
+<meta name="generator" content="Jekyll v3.7.4" />
+<meta property="og:title" content="rpc.z.cash" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A complete reference to the Zcash RPC." />
+<meta property="og:description" content="A complete reference to the Zcash RPC." />
+<link rel="canonical" href="/" />
+<meta property="og:url" content="/" />
+<meta property="og:site_name" content="rpc.z.cash" />
+<script type="application/ld+json">
+{"name":"rpc.z.cash","description":"A complete reference to the Zcash RPC.","@type":"WebSite","url":"/","headline":"rpc.z.cash","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/assets/css/style.css?v=9d392f32ef0be029bcee2ec7ce58e72a81e645d7">
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="/">rpc.z.cash</a></h1>
+        
+        
+
+        <p>A complete reference to the Zcash RPC.</p>
+
+        
+        <p class="view"><a href="http://github.com/ioptio/rpc.z.cash">View the Project on GitHub <small>ioptio/rpc.z.cash</small></a></p>
+        
+
+        
+
+        
+      </header>
+      <section>
+
+      
+<h2 id="zcash-rpc">Zcash RPC</h2>
+
+<p>The official Zcash client, zcashd, provides a remote procedure call (RPC) interface for various administrative tasks, wallet operations, and queries about network and blockchain data.</p>
+
+<h3 id="quick-reference">Quick Reference</h3>
+<h4 id="blockchain">Blockchain</h4>
+<ul>
+  <li><a href="#getblock">GetBlock</a></li>
+  <li><a href="#getbestblockhash">GetBestBlockHash</a></li>
+  <li><a href="#getblockhash">GetBlockHash</a></li>
+</ul>
+
+<h3 id="blockchain-1">Blockchain</h3>
+<h4 id="getbestblockhash">getbestblockhash</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getbestblockhash
+</code></pre></div></div>
+
+<p>Returns the header hash of the most recent block in best (longest) blockchain.</p>
+
+<p>Result:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hex"      (string) the block hash hex encoded
+</code></pre></div></div>
+
+<p><em>Example:</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>zcash-cli getbestblockhash 
+</code></pre></div></div>
+
+<p><em>Result:</em></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>00000000027155b36c8e25a67cef18878ed8e0fafbe980f3a467b96b56df6c3b
+</code></pre></div></div>
+
+<p><em>Example (cURL):</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">--user</span> username <span class="nt">--data-binary</span> <span class="s1">'{"jsonrpc": "1.0", "id":"curltest", "method": "getbestblockhash", "params": [] }'</span> <span class="nt">-H</span> <span class="s1">'content-type: text/plain;'</span> http://127.0.0.1:8232/
+</code></pre></div></div>
+
+<p><em>Result (cURL):</em></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="s2">"result"</span><span class="p">:</span><span class="s2">"00000000027155b36c8e25a67cef18878ed8e0fafbe980f3a467b96b56df6c3b"</span><span class="p">,</span><span class="s2">"error"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"curltest"</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>See also:</p>
+
+<ul>
+  <li><a href="#getblock">GetBlock</a></li>
+  <li><a href="#getblockhash">GetBlockHash</a></li>
+</ul>
+
+<h4 id="getblock">getblock</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getblock "hash|height" ( verbosity )
+</code></pre></div></div>
+
+<p>Gets a block with a particular header hash from the local block database either as a JSON object or as a serialized block.</p>
+
+<p>If verbosity is 0, returns a string that is serialized, hex-encoded data for the block.<br />
+If verbosity is 1, returns an Object with information about the block.<br />
+If verbosity is 2, returns an Object with information about the block and information about each transaction.</p>
+
+<p>Arguments:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. "hash|height"	(string, required) The block hash or height
+2. verbosity		(numeric, optional, default=1) 0 for hex encoded data, 1 for a json object, and 2 for json object with transaction data
+</code></pre></div></div>
+
+<p>Result (for verbosity = 0):</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"data"             (string) A string that is serialized, hex-encoded data for the block.
+</code></pre></div></div>
+
+<p>Result (for verbosity = 1):</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{  
+  "hash" : "hash",		(string) the block hash (same as provided hash)  
+  "confirmations" : n,		(numeric) The number of confirmations, or -1 if the block is not on the main chain  
+  "size" : n,	    		(numeric) The block size  
+  "height" : n,			(numeric) The block height or index (same as provided height)  
+  "version" : n,		(numeric) The block version  
+  "merkleroot" : "xxxx",	(string) The merkle root  
+  "finalsaplingroot" : "xxxx",	(string) The root of the Sapling commitment tree after applying this block  
+  "tx" : [               	(array of string) The transaction ids  
+     "transactionid"     	(string) The transaction id  
+     ,...  
+  ],  
+  "time" : ttt,			(numeric) The block time in seconds since epoch (Jan 1 1970 GMT)  
+  "nonce" : n,			(numeric) The nonce  
+  "bits" : "1d00ffff",		(string) The bits  
+  "difficulty" : x.xxx,		(numeric) The difficulty  
+  "previousblockhash" : "hash",	(string) The hash of the previous block  
+  "nextblockhash" : "hash"	(string) The hash of the next block
+}  
+</code></pre></div></div>
+
+<p>Result (for verbosity = 2):</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{  
+  ...,				Same output as verbosity = 1  
+  "tx" : [			(array of Objects) The transactions in the format of the getrawtransaction RPC. Different from verbosity = 1 "tx" result.  
+         ,...  
+  ],  
+  ,...				Same output as verbosity = 1  
+}
+</code></pre></div></div>
+
+<p><em>Example 1:</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>zcash-cli getblock <span class="s2">"00000000febc373a1da2bd9f887b105ad79ddc26ac26c2b28652d64e5207c5b5"</span> 
+</code></pre></div></div>
+
+<p><em>Result 1:</em></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000027155b36c8e25a67cef18878ed8e0fafbe980f3a467b96b56df6c3b"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"confirmations"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">1944</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"height"</span><span class="p">:</span><span class="w"> </span><span class="mi">440269</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"merkleroot"</span><span class="p">:</span><span class="w"> </span><span class="s2">"caa4c6293613e6d41a56e0b7a2e6a98b706b13cf37bf8d548989c566fc1530f4"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"finalsaplingroot"</span><span class="p">:</span><span class="w"> </span><span class="s2">"42c4c39c4bf13049078dd467868b61b4a2b05dbf225d2320310c8ac9636f5862"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tx"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+	</span><span class="s2">"1f18448a85adb20f9c035046c56a2b99dc761669798134662c7854b11ba36197"</span><span class="p">,</span><span class="w">
+	</span><span class="s2">"943b3d6306f9e7bfbb1e63dbac7bcb70cb74bf3a7001fa14b01b0bfbaecbe17e"</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1543953433</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"nonce"</span><span class="p">:</span><span class="w"> </span><span class="s2">"612a502300000000000000000000000000000000001682c78f7b45b800000000"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"solution"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00e62411134655fdc4a5717eb035e9e53ff03454630f188f957fd64c7b5e2698ba7dd0dc5aae345ffc65093cfeb509a1f4872aaad6c9575d3d833611bee1a50ec095e16df4ffafbefe75232264be69f94a1d79d6211e25c31e1a3d99cc9588d063d5f5c664191ace394c187350741e9cd96da239b47c6f6822fe473f0c2c21a723ae0877f26ff693739ca8e6219f7ddc7edd0e3e53f24620edbaedc1dd14609df4ec4e4c45b7aeba02fcebb09bb145f7e36ef1b27a7a34f953fd8ead51263a1ceab32f12e3ddd1d29e0c9d2e04f6e8ad02bf0b6985dbaa8f6de5d152a3b8d4e87387b5131e9643118e963ae847307fdddab3da80f212715dbbb35a4a2a77e5244856c7518e29736b687f411da521d29ba33cb206c684911129f51b8509b9c6b19149a9adfec634bcd48c186272bbaab34a5469d9fdc6f1597d9a5c35d52b96c01251eee68ba361c6fe6b110c20d9ed5205cef4556664eb7563f3e4b4dab157bf73039b9a980e544b115075f829e7f1f29c79ab50969323fcacd713b19cd90d56269994b73510546e22cd99e578392b2d65a6453899623f9f6517472cc37382f5e9bfb3531808bea7685c4f87c7ddf33d496f0dccf1f42840041f11277b818c31c779f4f2e552a2e6d1bbbdbcbb412621c1b12c10afc74a490550e4ac0aa185514d1b5f2d0b0e7d6152346d3b01b83aa6c52f96ce16ba9fcf0a64050f7c1a9e472a98428385ffc28ed2babd41364f02ca888917a459166925e07acb735a19f17aed1f0f4b34dfd1ecbf35868631393f4d8324845b0a82a92031020582dc55a4f84a75d4c2ddd4da97e07d7a0c20cef9088fd3881acbafd2ef4bf86dbade639c2c693dda73509fd1d1cb68f175db79c3a06312b31a73b62540b70a8e4e9f05bdec28c78e7506929c2b5e9f1a48d65d6049a1beafc08044f166c5646596e598804202b8408b7a98bd7d5b3075423a58277e17e51adcba046afdba708f3a07c0cb62942c52eac64d6975a5ca1a849b3ed2912141459d8705b7d42e8a614e1ac42a1fcdc7cc071bb23bd2d7939e00a20cc1567f0b871807600bc6bfce2fd9061b726667aec62332771b30b31ddb4fc9eb8cf96901b413f319fbf7490b3b52f1e90a1ae94f0c9fab61c1c822772c778ad0bff9bc1b6c0c3dde0f69e009b5151072ab6e48fa1d9b48139dee0348842e1088f126582480659ef0766868c3aa8e130814a8c1135b84d1031998436cec3c2aa2501a279107a98fa631ceb8d97547f4aec158d4e19471bb115c19e98cb5b1c7730fd1b7b38fc87325ae1bc574cefe157d652a12d965d3d13ec33acb23a341dcbc37cc281ab3dcb53113b151c39432db1d9ab8b8e040b5b8c116e2026748e647bbdc2951d93cd158c6aab87a58ce4aceb2ea2595c1d5db63459d48d05671a661af40a2041133fdbb0b43b8eb0ce53773b9c74e79609502e3092e1af2ad9189c12b4021bc61a661307b116741fb06f7529b839b5f0376abb29cf0d8dd59f2345fb5f90d15e351da0396611625c392fdb5ccedf391db6ab60b15c5e9aea9fa537cb733bb2322c3318ffe76189e20a90b02f170ec5fcc8a7481e25acd1328741ab3460b7f8fd78e19e83d9b8774a72b760bfeea54bfb57d12804e0fb44add3132f27490b0dc734a2608592f3a0717744c14eae639fa235a6929de266f672ebddc090957a988e71671c38771448522f7d3ed225a7c1e6408b7e87ab8d1fb54b3a331d9dabf0125af8beee14f485d06b2fb68401f99cf6a3faf5275afac145ed13908c08c8d55d3f83dde760489a43ad63d71585749ae77029c17cae1abbb47ed5842cbe1b3d2d2009b67fc224c372e04607459cdcca4acb5fce9dd4a7c1b1e1933e3336d0f0d410aff847826fd743abaaee9df6784"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"bits"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1c032c1c"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"difficulty"</span><span class="p">:</span><span class="w"> </span><span class="mf">42309169.04758057</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"chainwork"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000000000000000000000000000000000000000000000072dec4859dec07"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"anchor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a1d8980e8df415d63df700e3c4f5420cdb0e2e34fdbf7e68e7ca8d49174ad5ec"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"valuePools"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+	</span><span class="p">{</span><span class="w">
+  	</span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sprout"</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"monitored"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"valueDelta"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"valueDeltaZat"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+	</span><span class="p">},</span><span class="w">
+	</span><span class="p">{</span><span class="w">
+  	</span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sapling"</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"monitored"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"chainValue"</span><span class="p">:</span><span class="w"> </span><span class="mf">29771.98440110</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"chainValueZat"</span><span class="p">:</span><span class="w"> </span><span class="mi">2977198440110</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"valueDelta"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00000000</span><span class="p">,</span><span class="w">
+  	</span><span class="s2">"valueDeltaZat"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"previousblockhash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000001c6a8322204226eb73f371f9ed0d2dc2592ea868f3d946dbb624318"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"nextblockhash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000000002b6c9b2ad9e77c0b0d74017fc709fbf6bd7a7c1e6252b64114d6943"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p><em>Example 2:</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>zcash-cli getblock <span class="s2">"440269"</span> 
+</code></pre></div></div>
+
+<p><em>Result 2:</em>
+Same as Example 1</p>
+
+<p><em>Example (cURL):</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">--user</span> username <span class="nt">--data-binary</span> <span class="s1">'{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000febc373a1da2bd9f887b105ad79ddc26ac26c2b28652d64e5207c5b5"] }'</span> <span class="nt">-H</span> <span class="s1">'content-type: text/plain;'</span> http://127.0.0.1:8232/
+</code></pre></div></div>
+
+<p><em>Result (cURL):</em></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="s2">"result"</span><span class="p">:{</span><span class="s2">"hash"</span><span class="p">:</span><span class="s2">"00000000febc373a1da2bd9f887b105ad79ddc26ac26c2b28652d64e5207c5b5"</span><span class="p">,</span><span class="s2">"confirmations"</span><span class="p">:</span><span class="mi">427480</span><span class="p">,</span><span class="s2">"size"</span><span class="p">:</span><span class="mi">748771</span><span class="p">,</span><span class="s2">"height"</span><span class="p">:</span><span class="mi">12800</span><span class="p">,</span><span class="s2">"version"</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span><span class="s2">"merkleroot"</span><span class="p">:</span><span class="s2">"a2725bef50de57c71ede8d15f769ea5272ab7ad56bdb94ca8a73b12a469e7632"</span><span class="p">,</span><span class="s2">"finalsaplingroot"</span><span class="p">:</span><span class="s2">"0000000000000000000000000000000000000000000000000000000000000000"</span><span class="p">,</span><span class="s2">"tx"</span><span class="p">:[</span><span class="s2">"008440c3cec370670be6a83f6ff7f2518eb47de9257373f31b1e9640ae9e6986"</span><span class="p">,</span><span class="s2">"f1d6098b1b076a8f0b5036126bea8bf32eabc42453007ccd89814bb5030e2f59"</span><span class="p">,</span><span class="s2">"c94f6dfcfe60acf27c2dde44a8b38694896a6674b5dcf255c63b54ba8162cdc9"</span><span class="p">,</span><span class="s2">"2a438db7e3f95f9c74fa691a04763ecc34cf66383ffd8356ed0d405582083eb9"</span><span class="p">,</span><span class="s2">"bb4110cb9718f939a260a39826849300942151fb3c9f16e09cffe5a79b0e20fb"</span><span class="p">,</span><span class="s2">"c0ea223eeb4024de5fb3e94bb4be927221d17b5b3df6fce12ed43ec3d4fe7493"</span><span class="p">,</span><span class="s2">"4d9d4b1a133f5d3abb88a461f0fa669e0aa088b2d93235c3040bc776a6ab8fd9"</span><span class="p">,</span><span class="s2">"487f4ceece179a753cc6ba8136e19b2869e0602dda99d5f300e7a8ac58b45f27"</span><span class="p">,</span><span class="s2">"cc9095719f7bad03c64afa29e52b32487e2003952e0fb1bcec4273a11ab82a78"</span><span class="p">,</span><span class="s2">"2363a19c4b57636d14fc9ad8bc6b2c2609f309ff4b895b21ea6ee7c0908ab2d2"</span><span class="p">,</span><span class="s2">"b6819292057f8aa0f2bd1716fbecf53b3d2a591a3ca55b164468e26b26e86fc3"</span><span class="p">,</span><span class="s2">"d782054e50408745927b3fef8b813701e76d9c3af79e5ce49be16c112b93a23d"</span><span class="p">,</span><span class="s2">"0d8332217aefdfd34a594b28dea40e92be4682fc4d4f331124e6b3930d690379"</span><span class="p">,</span><span class="s2">"d85246dad6d0addc4a7ecac125d89a6586857f917fc59c896d8b257dfd7db447"</span><span class="p">,</span><span class="s2">"748271801ffc8296f69319f2f4b447774bfbefcad447bb91735433c115c0ad0a"</span><span class="p">,</span><span class="s2">"074d91d4c1dec867583fb661ab997e1f4e52a995ae9b97e6afa37ed1e39c8780"</span><span class="p">,</span><span class="s2">"3edef316394815b6608afed481c214497f78f93ba4aa3722a1c986c45d4557e6"</span><span class="p">,</span><span class="s2">"1d6fb748d2169149ffc61750eb0ddcdfe31ab7bede16b892a1968f701abc6bb0"</span><span class="p">,</span><span class="s2">"9d9080562542ce92d6df2c52a580a008f73e73d32ea7c0b389b6b4f8b8b0d36b"</span><span class="p">,</span><span class="s2">"51201e1867e8476e8a89c36b13bc07ae587aa00fd1b6d011e0c93d7bbc9995ea"</span><span class="p">,</span><span class="s2">"67b166ea599c253eff45edda8e6d73943c1db165bc72516dca9286ab1c354656"</span><span class="p">,</span><span class="s2">"2d73db2f76b7a6590f131d9b31f78e453904f352dc9605274f163402fa11091b"</span><span class="p">,</span><span class="s2">"92ec55dc7220c0d036383847c79d597b15e1aa18664fa5e995d16642c7733d5d"</span><span class="p">,</span><span class="s2">"4577bb320dfe33aa96814c5932f5d1dde847ef5bff2e63e261b463996b86beb3"</span><span class="p">,</span><span class="s2">"fc5ccfbfaa901bdf28c4673f3a6dab4e27fbda310676055ac1ba4a2b639468f4"</span><span class="p">],</span><span class="s2">"time"</span><span class="p">:</span><span class="mi">1479519154</span><span class="p">,</span><span class="s2">"nonce"</span><span class="p">:</span><span class="s2">"0000000000000000000000000000000000000000000000000014117519b7c6db"</span><span class="p">,</span><span class="s2">"solution"</span><span class="p">:</span><span class="s2">"0076568fbc8ac5c33d60148fc74c28a19becd044e850593f470862db3dc582d54e13ce679b0a9a5aacc0014d8e917b9f5f1fb235028e90ab9245952a96eb8f339f6dc70bf28139d9e20853b05c2c16e53439f9140354ba7dffca181b20bb31986763f3813609501a3005e42351f122bb9ddbf3a0b0ad05fa186be54ebf951fe432d63faa01cf6ccbb20ffb650c024a4456130340713bbabcd5b9dd35f7c76e5dfb7af5ed70d2552802db77648812d9f2ff58d1c99dc348122605dcf25d06943a730162c3194fab435e402f7dc5d6e2354d6a1dca0ec7b708f444dfe31b5b815c77c382443c3d4e6cadb3f5eee1b829d36019388ce712a6d8d5b858b3137efa12040d5937dbef6665e373604e331c3cec891aedbafd0451162debfff1c25ae37cb8a1daf1d7ce17acc7068998301d614572150eba0b6974ef105bec20a89e6ec94b846b010ab36f88deb9591ff979f3e905689094be513fc509f4121dd4fbddce669b38a8950833addd359b48551b2a816918aad66ce6e039e45906e70af93953c3e9bb9142a02ce63bfd34837c32c0191013dd4bc7f1cff41594ccdab9ce495100dbf1b8143594182f544acafa3a2756085215d63b4a9e6d1d1c44017bc25a2ceb5800850a24cfebb59bdf5848a620a46ff4a308ff29ff92324390f06609fb39b3257727c33aad290af7ab842b0a13d37081cf34b03e5b580820d05453c6233c6051710e48aa67e2f4d39f83872eff3f3d49aba2259994356046e84eb9968179d43615712c9c1fd9e4657a17b5db05ecb50b4e631f7374166fc368990cc29560d954e5063cb596f4bd7e92740a672cea0347e0c8cb1341f124ca727c9ad3d12946189846719813a1ff487212bcb998cf2132cdd8fcb111ce10c12e2152ef5bcaf4f9b0b177be4e3352a261162bb2df58d4d74cd88e72027af6d52acc85b69f240209ffaa3b55ed5510b1e044e328a898f528779b715577151c9065b59543f40820a9e12dcfafab7e991421b03ce11c2bf131c2238454c72c68c51b1b7bb3f33ec08422dceb782785b49831d6e3fd569aad3f0bed0e717a0888da3d37b856f1a55844a6e4f31b75854d23d69384dd1cf36dafcc6943f3eaf34aa4041ec33e125f7cca77796c59df85941265c52d79e2347084a5392e97fc442b6c7379eab6752a505cc3ad747da80f0bbf05d24cf31667adce75a13ac488f5e44d1008ce1f1eaf5431122f88c444d57a3ef0477f69e3ff297e0bcf6778515d4b353a8ed3deb8ae38d523d86ab0a310939cdae9d085a5509bc162c9ba381211f2bb3a9e0e28c6fc108a9acde67d67b80a615597628f5b3446686dd4c149df2ac5cc74e6b04fc8e2a6849a3e90421e82934d2351509ab54f168cdce1c5f3a20afe0cf552e0dfa905564109597535b4eab35b26325ff9b2a3025a63f61dc6718d31dee8c607e1d2a739e25a86de0d85ddac8d09bc79628ca2b8a6d348253ea977dcd21355671ee254cded9bfee136f5d4c3fd9dc55f9de2208d77de01d57fd788812352121d65790da29e61f00d4a37ad5d17ab8bb98293b783e7fb3f6163de1060118f4117038b99d46111d5cfb9e390e7659efea11c1814f624595856fecb67a9227b7aefef85e31f9de14676bfb094672d5bed1bf65bdbf7e26b03677cc72003446471e60d75cce36cb1c2c1984b30a342b2b06139256d5f5f5fa8c538b45428b447e78dbb993a8d0808d98c5c39042a4f2b9a81a5089b6f6d6ec0b19f5e574b1da2b9d6fa08f49c672c88e00302cc9e77789314c59be0ca4f6bb38b67571e0d549f95ec9ff697c73899a6e6f0eede59c6a8678b86bebc178a07dc5fd82bea7a0fe0d7fd60da4a44ae756eb4b182b0906ace3f5d1eb9932b356b63ebd54639d653621ee55311fe"</span><span class="p">,</span><span class="s2">"bits"</span><span class="p">:</span><span class="s2">"1d0181f2"</span><span class="p">,</span><span class="s2">"difficulty"</span><span class="p">:</span><span class="mf">347762.928199834</span><span class="p">,</span><span class="s2">"chainwork"</span><span class="p">:</span><span class="s2">"000000000000000000000000000000000000000000000000000012024f06e9d8"</span><span class="p">,</span><span class="s2">"anchor"</span><span class="p">:</span><span class="s2">"47442189f27d5c2ac3e24dcfd6d227aef5c41548f25f806c603964ec011a7627"</span><span class="p">,</span><span class="s2">"valuePools"</span><span class="p">:[{</span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"sprout"</span><span class="p">,</span><span class="s2">"monitored"</span><span class="p">:</span><span class="kc">false</span><span class="p">},{</span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"sapling"</span><span class="p">,</span><span class="s2">"monitored"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="s2">"chainValue"</span><span class="p">:</span><span class="mf">0.00000000</span><span class="p">,</span><span class="s2">"chainValueZat"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s2">"valueDelta"</span><span class="p">:</span><span class="mf">0.00000000</span><span class="p">,</span><span class="s2">"valueDeltaZat"</span><span class="p">:</span><span class="mi">0</span><span class="p">}],</span><span class="s2">"previousblockhash"</span><span class="p">:</span><span class="s2">"000000014e765bbaa1aec886d6b7b784e1e367e2700d54df163e8a07496f1935"</span><span class="p">,</span><span class="s2">"nextblockhash"</span><span class="p">:</span><span class="s2">"0000000078548f474d22ebdf90081935f32f8feafdf0f47de55acbc45504271f"</span><span class="p">},</span><span class="s2">"error"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"curltest"</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>See also:</p>
+
+<ul>
+  <li><a href="#getblockhash">GetBlockHash</a></li>
+  <li><a href="#getbestblockhash">GetBestBlockHash</a></li>
+</ul>
+
+<h4 id="getblockhash">getblockhash</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getblockhash index
+</code></pre></div></div>
+
+<p>Returns the hash of a block from the best (longest) blockchain at the index provided.</p>
+
+<p>Arguments:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1. index         (numeric, required) The block index
+</code></pre></div></div>
+
+<p>Result:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hash"         (string) The block hash
+</code></pre></div></div>
+
+<p><em>Example:</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>zcash-cli getblockhash 440296 
+</code></pre></div></div>
+
+<p><em>Result:</em></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>000000000271d725a541a3366a682e782a9a178583030ab0234ab3788447f692
+</code></pre></div></div>
+
+<p><em>Example (cURL):</em></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">--user</span> username <span class="nt">--data-binary</span> <span class="s1">'{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [440296] }'</span> <span class="nt">-H</span> <span class="s1">'content-type: text/plain;'</span> http://127.0.0.1:8232/
+</code></pre></div></div>
+
+<p><em>Result (cURL):</em></p>
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="s2">"result"</span><span class="p">:</span><span class="s2">"000000000271d725a541a3366a682e782a9a178583030ab0234ab3788447f692"</span><span class="p">,</span><span class="s2">"error"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">"id"</span><span class="p">:</span><span class="s2">"curltest"</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>See also:</p>
+
+<ul>
+  <li><a href="#getblock">GetBlock</a></li>
+  <li><a href="#getbestblockhash">GetBestBlockHash</a></li>
+</ul>
+
+
+
+      </section>
+      <footer>
+        
+        <p>This project is maintained by <a href="http://github.com/ioptio">ioptio</a></p>
+        
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>
